@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang='sv'>
+
+<head>
+    <title>Wigells larmsystem</title>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width initial-scale=1.0' />
+    <link rel='stylesheet' href='style.css' />
+    <link rel='stylesheet' href='styleMobile.css' media='screen and (max-width: 768px)'>
+    <link rel='preconnect' href='https://fonts.googleapis.com'>
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+    <link href='https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap'
+        rel='stylesheet'>
+    <link rel='icon' type='image/jpg' href='img/wigellLogo_white.jpg'>
+</head>
+
+<body>
+    <div class='container'>
+        <ul id='alarm-list'>
+        </ul>
+        <div id='log-wrapper'>
+            <table id='log-table' class='table-rows'>
+                <thead>
+                    <tr>
+                        <th>Tidpunkt</th>
+                        <th>Händelse</th>
+                    </tr>
+                </thead>
+                <tbody id='log-table-body'>
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+    <div id='pin-modal' class='modal-overlay'>
+        <div class='modal-content'>
+            <h3>Säkerhetskontroll</h3>
+            <label for='pin-input'>Ange din fyrsiffriga pinkod, avsluta med #:</label>
+            <input type='text' id='pin-input' inputmode='tel' maxlength='5' style='-webkit-text-security: disc;'>
+            <button id='pin-submit' class='btn btn-positive'>Bekräfta</button>
+            <button id='pin-cancel' class='btn btn-negative btn-secondary'>Avbryt</button>
+        </div>
+
+    </div>
+
+    <div id='custom-alert' class='modal-overlay'>
+        <div class='modal-content alert-box'>
+            <h3 id='alert-title'>Meddelande</h3>
+            <p id='alert-message'></p>
+            <button id='alert-ok-btn' class='btn btn-positive'>OK</button>
+        </div>
+    </div>
+    <div id="add-alarm-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h2>Lägg till nytt larm</h2>
+        <form id="add-alarm-form">
+            <div class="form-group">
+                <label for="new-alarm-location">Plats:</label>
+                <input type="text" id="new-alarm-location" placeholder="t.ex. Garage" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="new-alarm-type">Typ av larm:</label>
+                <select id="new-alarm-type">
+                    <option value="fire">Brandalarm</option>
+                    <option value="burglar">Inbrottsalarm</option>
+                </select>
+            </div>
+
+            <div class="modal-buttons">
+                <button type="submit" class="btn btn-positive">Spara larm</button>
+                <button type="button" id="close-add-modal" class="btn btn-negative">Avbryt</button>
+            </div>
+        </form>
+    </div>
+</div>
+    <script src='script.js'></script>
+</body>

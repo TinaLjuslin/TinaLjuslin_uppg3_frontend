@@ -1,0 +1,391 @@
+:root {
+    --wigell-color: #2D5E4A;
+    --background-main-color: #D5E0CC;
+    --background-sidebar-color: #AAB3A3;
+    --background-neutral-color: #E6E6E6;
+    --negative-color: #97351C;
+    --background-negative-color: #FDF2F2;
+    --positive-color: #37803A;
+    --background-positive-color: #E8F5E9;
+}
+:focus {
+    outline: 3px solid var(--wigell-color);
+    outline-offset: 4px;
+}
+html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+}
+
+.wrapper {
+    display: flex;
+    align-items: flex-start;
+    min-height: 100vh;
+}
+
+main>section {
+    display: none;
+}
+
+main>section.active {
+    display: block;
+}
+
+section.active section {
+    display: block;
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    color: var(--wigell-color);
+    background-color: var(--background-main-color);
+}
+.container {
+    max-width: 1000px; /* En vanlig och bra bredd för instrumentpaneler */
+    margin: 0 auto;    /* 0 uppe/nere, auto på sidorna centrerar containern */
+    padding: 20px;     /* Ger lite luft mot kanterna på mindre skärmar */
+}
+ul {
+    list-style: none;
+    padding: 0;
+}
+h1,
+h2,
+h3,
+h4 {
+    color: var(--wigell-color);
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+h2 {
+    font-size: 2rem;
+    border-bottom: 2px solid var(--background-sidebar-color);
+    padding-bottom: 5px;
+}
+
+h3 {
+    font-size: 1.5rem;
+}
+
+h4 {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/********************************************************
+    BODY TEXT
+*********************************************************/
+p {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #333333;
+    margin-bottom: 1.5rem;
+    max-width: 70ch;
+}
+
+strong {
+    font-weight: 700;
+    color: var(--wigell-color);
+}
+
+em {
+    font-style: italic;
+}
+
+/********************************************************
+    BUTTONS
+*********************************************************/
+.btn {
+    padding: 12px 24px;
+    min-height: 48px;
+    border: none;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 600;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.1s;
+    display: inline-block;
+}
+
+.btn:active {
+    transform: scale(0.98);
+}
+
+/* 1. Standard */
+.btn-standard {
+    background-color: var(--wigell-color);
+    color: white;
+}
+
+.btn-standard:hover {
+    background-color: #1e3f32;
+}
+
+/* 2. Funktion */
+.btn-function {
+    background-color: var(--background-sidebar-color);
+    color: var(--wigell-color);
+}
+
+.btn-function:hover {
+    background-color: #8e9986;
+}
+
+/* 3. Positive */
+.btn-positive {
+    background-color: var(--positive-color);
+    color: white;
+}
+
+.btn-positive:hover {
+    background-color: #388E3C;
+}
+
+/* 4. Negative */
+.btn-negative {
+    background-color: var(--negative-color);
+    color: white;
+}
+
+.btn-negative:hover {
+    background-color: #782814;
+}
+
+/* Copy */
+.btn-copy {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.btn-copy:hover {
+    background-color: #1e3f32;
+}
+
+/********************************************************
+    MESSAGES
+*********************************************************/
+.alert {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    border-left: 5px solid;
+}
+
+.alert-positive {
+    background-color: var(--background-positive-color);
+    border-left-color: var(--positive-color);
+}
+
+.alert-negative {
+    background-color: var(--background-negative-color);
+    border-left-color: var(--negative-color);
+}
+
+/********************************************************
+    PANELS
+*********************************************************/
+.panel {
+    display: flex;
+    flex-direction: row;          /* Lägger text och knapp på en rad */
+    justify-content: space-between; /* Trycker texten till vänster och knappen till höger */
+    align-items: center;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 5px solid;
+    border-radius: 4px;
+}
+
+.panel-positive {
+    background-color: var(--background-positive-color);
+    border-left-color: var(--positive-color);
+}
+
+.panel-negative {
+    background-color: #ffebee;
+    border-left-color: var(--negative-color);
+}
+
+.panel-neutral {
+    background-color: var(--background-neutral-color);
+    border-left-color: var(--background-sidebar-color);
+    color: #333;
+}
+
+/********************************************************
+    TABLE
+*********************************************************/
+#log-wrapper {
+    max-height: 350px; /* Justera för att visa ca 10 rader */
+    overflow-y: auto;  /* Aktiverar scroll */
+    border: 1px solid #444;
+    background: #f9f9f9;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    margin-bottom: 30px;
+}
+
+th {
+    position: sticky;
+    top: 0;
+    background-color: var(--wigell-color);
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+
+td {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+}
+/* rows */
+.table-rows tr:nth-child(even) {
+    background-color: #f2f5f1;
+}
+
+.table-rows tr:hover {
+    background-color: #e2e8de;
+}
+
+/* columns */
+.table-cols td:nth-child(even) {
+    background-color: #f2f5f1;
+}
+
+.table-cols th:nth-child(even) {
+    background-color: #224738;
+}
+
+.table-cols tr:hover td {
+    background-color: #e2e8de;
+}
+
+/********************************************************
+    MODAL
+*********************************************************/
+.modal-overlay {
+    display: none; /* Dold som standard */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Mörk genomskinlig bakgrund */
+    z-index: 1000; /* Alltid överst */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: var(--background-main-color);
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content input {
+    display: block;
+    margin: 15px auto;
+    padding: 10px;
+    font-size: 1.2rem;
+    width: 80px;
+    text-align: center;
+}
+/********************************************************
+    ALERT
+*********************************************************/
+.alert-box {
+    border-top: 5px solid var(--wigell-color); /* En färgad list i toppen */
+    min-width: 300px;
+}
+
+#alert-message {
+    margin: 20px 0;
+    font-size: 1.1rem;
+    color: #333;
+}
+.alert {
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Montserrat', sans-serif;
+    border-left: 5px solid;
+}
+
+.alert-positive {
+    background-color: var(--background-positive-color);
+    border-left-color: var(--positive-color);
+}
+
+.alert-negative {
+    background-color: var(--background-negative-color);
+    border-left-color: var(--negative-color);
+}
+/* PIN-modalkontroll */
+#pin-modal {
+    z-index: 100;
+}
+
+/* Din Custom Alert MÅSTE ligga högre */
+#custom-alert {
+    display: none; /* Viktigt att den är none som start */
+    z-index: 999;  /* Mycket högre än allt annat */
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input, 
+.form-group select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.modal-buttons {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}

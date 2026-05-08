@@ -1,0 +1,59 @@
+    h1 {
+        font-size: 1.8rem;
+    }
+
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.3rem;
+    }
+
+    .panel {
+        flex-direction: column;
+        /* Staplar text och knapp på varandra */
+        align-items: flex-start;
+        /* Håller texten till vänster */
+    }
+
+    .panel button {
+        width: 100%;
+        /* Gör knappen bred och lätt att klicka på i mobilen */
+        margin-left: 0;
+        /* Ta bort marginalen från webb-läget */
+        margin-top: 15px;
+        /* Skapa lite luft mellan text och knapp */
+    }
+
+    .modal-content {
+        width: 90%;
+        /* Gör att modalen tar upp nästan hela bredden på små skärmar */
+        padding: 20px;
+        /* Lite mindre padding så texten får plats */
+    }
+
+    .container {
+        max-width: 100%;
+        /* Låt den ta upp hela bredden på mobilen */
+        padding: 10px;
+        /* Lite mindre luft på sidorna för att spara plats */
+    }
+
+    .table-container,
+    .code-container {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    pre {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-size: 0.8rem;
+    }
+
+
+    .btn {
+        margin-bottom: 10px;
+    }
