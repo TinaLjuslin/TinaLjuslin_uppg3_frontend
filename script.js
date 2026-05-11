@@ -1,4 +1,3 @@
-
 const alarms = [
     { id: 0, location: 'hall, övervåning', status: 'deactivated', sort: 'fire' },
     { id: 1, location: 'hall, övervåning', status: 'activated', sort: 'burglar' },
@@ -17,6 +16,8 @@ localStorage.setItem('pins', JSON.stringify(pins));
 let currentPendingAlarmIndex = null;
 let pendingAction = null;
 let isSystemLocked = false;
+
+//ritar upp allting
 function displayAlarms() {
     const listElement = document.getElementById('alarm-list');
     const data = localStorage.getItem('wigellAlarms');
@@ -111,6 +112,7 @@ function displayAlarms() {
     }
 }
 const listElement = document.getElementById('alarm-list');
+
 //någon klickar på en knapp i listan
 listElement.addEventListener('click', (e) => {
     if (e.target.tagName === 'BUTTON') {
@@ -121,9 +123,9 @@ listElement.addEventListener('click', (e) => {
         } else if (btnId === 'btn-deactivate-all') {
             deactivateAll();
         } else if (btnId === 'btn-add-alarm') {
+            pendingAction = 'OPEN_ADD_MODAL';
             console.log('nytt alarm');
-            document.getElementById('add-alarm-modal').style.display = 'flex';
-            document.getElementById('new-alarm-location').focus();
+            openPinModal();
         } else if (btnId === 'btn-remove-alarm') {
             console.log('ta bort alarm');
             myAlert('Du har inte rättighet att plocka bort alarm, ring en admin', 'Nope', 'alert-negative');
@@ -133,6 +135,7 @@ listElement.addEventListener('click', (e) => {
         }
     }
 });
+
 // Stäng modalen
 document.getElementById('close-add-modal').addEventListener('click', () => {
     document.getElementById('add-alarm-modal').style.display = 'none';
@@ -145,29 +148,27 @@ document.getElementById('add-alarm-form').addEventListener('submit', (e) => {
     const location = document.getElementById('new-alarm-location').value;
     const type = document.getElementById('new-alarm-type').value;
 
-    // 1. Hämta befintliga larm
     const data = localStorage.getItem('wigellAlarms');
     const alarmArray = data ? JSON.parse(data) : [];
 
-    // 2. Skapa det nya larm-objektet
+    //skapa nytt alarm
     const newAlarm = {
         id: alarmArray.length,
         location: location,
-        status: 'deactivated', // Alltid avstängt som standard
+        status: 'deactivated',
         sort: type
     };
 
-    // 3. Spara ner
     alarmArray.push(newAlarm);
     localStorage.setItem('wigellAlarms', JSON.stringify(alarmArray));
 
-    // 4. Logga händelsen
     saveToLog(`Ny enhet installerad: ${type === 'fire' ? 'Brandalarm' : 'Inbrottsalarm'} på ${location}`);
 
-    // 5. Uppdatera vyn och stäng
     displayAlarms();
     document.getElementById('add-alarm-modal').style.display = 'none';
-    document.getElementById('add-alarm-form').reset(); // Töm formuläret
+    document.getElementById('add-alarm-form').reset(); 
+    myAlert(`Ny enhet installerad: ${type === 'fire' ? 'Brandalarm' : 'Inbrottsalarm'} på ${location}`, 'Nytt alarm');
+
 });
 function activateAll() {
     pendingAction = 'ACTIVATE_ALL';
@@ -180,6 +181,7 @@ function deactivateAll() {
     currentPendingAlarmIndex = null;
     openPinModal();
 }
+
 //ändra alarm
 function confirmAlarmChange() {
     const data = localStorage.getItem('wigellAlarms');
@@ -196,6 +198,12 @@ function confirmAlarmChange() {
         alarmArray.forEach(alarm => alarm.status = 'deactivated');
         saveToLog("SYSTEM: Alla enheter har STÄNGTS AV");
         pendingAction = null;
+    } else if (pendingAction === 'OPEN_ADD_MODAL') {
+        document.getElementById('pin-modal').style.display = 'none';
+        document.getElementById('add-alarm-modal').style.display = 'flex';
+        document.getElementById('new-alarm-location').focus();
+        pendingAction = null;
+        return;
     } else if (currentPendingAlarmIndex !== null) {
         const index = parseInt(currentPendingAlarmIndex);
         const alarm = alarmArray[index];
@@ -211,7 +219,6 @@ function confirmAlarmChange() {
 
         currentPendingAlarmIndex = null;
     }
-
     localStorage.setItem('wigellAlarms', JSON.stringify(alarmArray));
     displayAlarms();
 }
@@ -225,13 +232,14 @@ const pinSubmit = document.getElementById('pin-submit');
 function openPinModal() {
     if (isSystemLocked) {
         myAlert("Systemet är fortfarande låst. Vänta en stund.", "Nekad tillträde", "alert-negative");
-        return; // Avbryt funktionen så rutan inte öppnas
+        return;
     }
     pinModal.style.display = 'flex';
     pinInput.value = '';
     pinInput.focus();
 }
 let numberOfTries = 0;
+
 //lyssna på ok-knappen på pin-rutan
 pinSubmit.addEventListener('click', () => {
     const enteredPin = pinInput.value;
@@ -240,12 +248,13 @@ pinSubmit.addEventListener('click', () => {
         // rätt kod inslagen
         pinModal.style.display = 'none';
         numberOfTries = 0;
-
+        const currentAction = pendingAction;
         // Utför ändringen på larmet
         confirmAlarmChange();
+        if (currentAction !== 'OPEN_ADD_MODAL') {
+            myAlert('Dina inställningar har sparats', 'Rätt kod', 'alert-positive');
 
-        myAlert('Dina inställningar har sparats', 'Rätt kod', 'alert-positive');
-
+        }
     } else {
         // felaktig kod inslagen
         numberOfTries++;
@@ -257,7 +266,7 @@ pinSubmit.addEventListener('click', () => {
         } else {
             isSystemLocked = true;
             saveToLog('Systemet låst');
-            myAlert('Du har slagit in felaktig kod tre gånger. Systemet är låst i 30 sek.', 'Systemmeddelande', 'alert-negative');
+            myAlert('Du har slagit in felaktig kod tre gånger. Systemet är låst i 10 sek.', 'Systemmeddelande', 'alert-negative');
             pinModal.style.display = 'none';
             setTimeout(() => {
                 isSystemLocked = false;
@@ -281,6 +290,7 @@ function checkPinCode(enteredPinCode) {
     const pinArray = JSON.parse(correctPins);
     const justPin = enteredPinCode.substring(0, 4);
     const lastChar = enteredPinCode.substring(4);
+    //kollar flera användare, hade en idé som blev fel
     const isCorrect = pinArray.some(pin => pin === justPin && lastChar === '#');
     if (isCorrect) {
         return true;
@@ -290,7 +300,7 @@ function checkPinCode(enteredPinCode) {
     }
 }
 
-
+//sparar till log
 function saveToLog(activity) {
     const now = new Date();
     const hours = now.getHours().toString().padStart(2, '0');
@@ -314,6 +324,7 @@ function saveToLog(activity) {
     localStorage.setItem('activities', JSON.stringify(activityArray));
 }
 
+//för att visa meddelanden
 function myAlert(msg, title = 'Systemmeddelande', className) {
     const alertOverlay = document.getElementById('custom-alert');
     const alertBox = alertOverlay.querySelector('.modal-content');
@@ -334,9 +345,12 @@ function myAlert(msg, title = 'Systemmeddelande', className) {
     okBtn.focus();
 
 }
+
+//stäng medelande-rutan
 function closeAlert() {
     document.getElementById('custom-alert').style.display = 'none';
 }
+
 //för att få rätt på tabbarna på pin-rutan
 pinModal.addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
@@ -344,12 +358,12 @@ pinModal.addEventListener('keydown', (e) => {
         const firstElement = focusableElements[0];
         const lastElement = focusableElements[focusableElements.length - 1];
 
-        if (e.shiftKey) { // Om man trycker Shift + Tab (hoppar bakåt)
+        if (e.shiftKey) { // Om man trycker shift+tab
             if (document.activeElement === firstElement) {
                 lastElement.focus();
                 e.preventDefault();
             }
-        } else { // Vanlig Tab (hoppar framåt)
+        } else { // Vanlig tab
             if (document.activeElement === lastElement) {
                 firstElement.focus();
                 e.preventDefault();
@@ -357,6 +371,7 @@ pinModal.addEventListener('keydown', (e) => {
         }
     }
 });
+
 //för att bara knapparna ska få fokus vid tab
 document.getElementById('alarm-list').addEventListener('keydown', (e) => {
     if (e.key === 'Tab') {
@@ -364,12 +379,12 @@ document.getElementById('alarm-list').addEventListener('keydown', (e) => {
         const firstBtn = buttons[0];
         const lastBtn = buttons[buttons.length - 1];
 
-        if (e.shiftKey) { // Shift + Tab (bakåt)
+        if (e.shiftKey) { 
             if (document.activeElement === firstBtn) {
                 lastBtn.focus();
                 e.preventDefault();
             }
-        } else { // Tab (framåt)
+        } else { 
             if (document.activeElement === lastBtn) {
                 firstBtn.focus();
                 e.preventDefault();
@@ -377,18 +392,21 @@ document.getElementById('alarm-list').addEventListener('keydown', (e) => {
         }
     }
 });
-//Skapa en lyssnare för OK-knappen i din alert
+
+//lyssnare för OK-knappen i meddelande-rutan
 document.getElementById('alert-ok-btn').addEventListener('click', () => {
     const alertOverlay = document.getElementById('custom-alert');
     const pinInput = document.getElementById('pin-input');
 
-    // Stäng alerten
+    
     alertOverlay.style.display = 'none';
 
-    // Flytta fokus tillbaka till PIN-rutan!
-    if (pinInput) {
+    if (pinModal.style.display === 'flex') {
         pinInput.focus();
         pinInput.select();
+    } else {
+        displayAlarms();
     }
 });
+
 displayAlarms();

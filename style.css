@@ -41,9 +41,9 @@ body {
     background-color: var(--background-main-color);
 }
 .container {
-    max-width: 1000px; /* En vanlig och bra bredd för instrumentpaneler */
-    margin: 0 auto;    /* 0 uppe/nere, auto på sidorna centrerar containern */
-    padding: 20px;     /* Ger lite luft mot kanterna på mindre skärmar */
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
 }
 ul {
     list-style: none;
@@ -342,15 +342,17 @@ td {
     background-color: var(--background-negative-color);
     border-left-color: var(--negative-color);
 }
-/* PIN-modalkontroll */
+
+/********************************************************
+    PIN-RUTAN
+*********************************************************/
 #pin-modal {
     z-index: 100;
 }
 
-/* Din Custom Alert MÅSTE ligga högre */
 #custom-alert {
-    display: none; /* Viktigt att den är none som start */
-    z-index: 999;  /* Mycket högre än allt annat */
+    display: none;
+    z-index: 999;
 }
 
 .modal-overlay {
@@ -363,6 +365,7 @@ td {
     justify-content: center;
     align-items: center;
 }
+
 .form-group {
     margin-bottom: 15px;
     text-align: left;
